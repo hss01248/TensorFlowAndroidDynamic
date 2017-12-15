@@ -57,3 +57,8 @@ public interface DownloadCallback {
     }
 ```
 
+# Thanks
+
+[FileDownloader](https://github.com/lingochamp/FileDownloader)
+
+[AndroidTensorFlowMachineLearningExample](https://github.com/MindorksOpenSource/AndroidTensorFlowMachineLearningExample)
