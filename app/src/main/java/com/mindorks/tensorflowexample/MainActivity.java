@@ -48,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String MODEL_FILE = "file:///android_asset/tensorflow_inception_graph.pb";
     private static final String LABEL_FILE =
             "file:///android_asset/imagenet_comp_graph_label_strings.txt";
-
-    public static final String PB_URL = "http://10.0.16.48/hss/tensorflow_inception_graph.pb";
+    public static final String PB_URL = "https://github.com/hss01248/TensorFlowAndroidDynamic/blob/master/old/tensorflow_inception_graph.pb?raw=true";
 
     private Classifier classifier;
     private Executor executor = Executors.newSingleThreadExecutor();
@@ -112,8 +111,14 @@ public class MainActivity extends AppCompatActivity {
 
         TfFileDownloader.downloadSo("", new TfFileDownloader.DownloadCallback() {
             @Override
+            public void onPending(String url) {
+
+            }
+
+            @Override
             public void onSuccess(String url, String filePath) {
                 try {
+                    NotifyUtil.cancel(8988);
                     System.load(filePath);
                     downloadPb();
                     MyToast.success("download success");
@@ -130,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFail(String url, Throwable e) {
                 e.printStackTrace();
+                NotifyUtil.cancel(8988);
 
             }
         });
@@ -188,13 +194,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void downloadPb() {
         TfFileDownloader.downPb(PB_URL,
-            "tensorflow_inception_graph.pb",
+            "old/tensorflow_inception_graph.pb",
             "",
             new TfFileDownloader.DownloadCallback() {
-            @Override
+                @Override
+                public void onPending(String url) {
+
+                }
+
+                @Override
             public void onSuccess(String url, String filePath) {
                 //使用load方法加载内部储存的SO库
                 try {
+                    NotifyUtil.cancel(8989);
                     initTensorFlowAndLoadModel(filePath);
                     MyToast.success("download success");
                 }catch (Exception e){
@@ -211,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFail(String url, Throwable e) {
+                NotifyUtil.cancel(8989);
 
             }
         });

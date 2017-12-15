@@ -17,10 +17,10 @@ public class BaseApp extends Application {
     public void onCreate() {
         super.onCreate();
         TfFileDownloader.init(this,true);
-        TfFileDownloader.setSoUrl("http://10.0.16.48/hss/jni/arm64-v8a/libtensorflow_inference.so",
-            "http://10.0.16.48/hss/jni/armeabi-v7a/libtensorflow_inference.so",
-            "http://10.0.16.48/hss/jni/x86/libtensorflow_inference.so",
-            "http://10.0.16.48/hss/jni/x86_64/libtensorflow_inference.so");
+        TfFileDownloader.setSoUrl("https://github.com/hss01248/TensorFlowAndroidDynamic/blob/master/old/tfandroid-1.4.0-original/jni/arm64-v8a/libtensorflow_inference.so?raw=true",
+            "https://github.com/hss01248/TensorFlowAndroidDynamic/blob/master/old/tfandroid-1.4.0-original/jni/armeabi-v7a/libtensorflow_inference.so?raw=true",
+            "https://github.com/hss01248/TensorFlowAndroidDynamic/blob/master/old/tfandroid-1.4.0-original/jni/x86/libtensorflow_inference.so?raw=true",
+            "https://github.com/hss01248/TensorFlowAndroidDynamic/blob/master/old/tfandroid-1.4.0-original/jni/x86_64/libtensorflow_inference.so?raw=true");
         NotifyUtil.init(this);
         MyToast.init(this,true,false);
         MyPermission.init(this);

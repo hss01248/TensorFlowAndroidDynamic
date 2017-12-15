@@ -53,6 +53,12 @@ public class TfFileDownloader {
     }
 
     public interface DownloadCallback {
+
+        /**
+         * 真正开始准备下载
+         * @param url
+         */
+        void onPending(String url);
         void onSuccess(String url, String filePath);
 
         void onProgress(String fileName, int soFarBytes, int totalBytes);
@@ -118,9 +124,11 @@ public class TfFileDownloader {
                                        final String path, final DownloadCallback callback) {
         FileDownloader.getImpl().create(finalUrl)
             .setPath(path)
+            .setWifiRequired(true)
             .setListener(new FileDownloadListener() {
                 @Override
                 protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                    callback.onPending(finalUrl);
                 }
 
                 @Override
