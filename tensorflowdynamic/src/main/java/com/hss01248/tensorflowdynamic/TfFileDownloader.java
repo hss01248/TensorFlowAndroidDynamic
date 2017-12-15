@@ -73,7 +73,7 @@ public class TfFileDownloader {
      */
     public static void downloadSo(final String md5, final DownloadCallback callback) {
 
-        String abi = getSupportedAbi();
+        String abi = getFirstSupportedAbi();
         if (TextUtils.isEmpty(abi)) {
             callback.onFail("", new Throwable("support abi is empty:"));
             return;
@@ -208,9 +208,8 @@ public class TfFileDownloader {
         return "";
     }
 
-    private static String getSupportedAbi() {
+    private static String getFirstSupportedAbi() {
         String abi1 = "";
-
         if (Build.VERSION.SDK_INT >= 21) {
             String[] abis = Build.SUPPORTED_ABIS;
             if (abis != null) {
@@ -233,7 +232,6 @@ public class TfFileDownloader {
             }
         }
         return abi1;
-
     }
 
 

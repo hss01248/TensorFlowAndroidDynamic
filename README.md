@@ -15,6 +15,10 @@ the jar and so file are base on google compile version:   compile 'org.tensorflo
 
 
 
+blog:[tensorflow集成到Android以及so库和pb文件的动态加载实践](https://juejin.im/post/5a339c546fb9a0452405e398)
+
+
+
 # useage
 
 ## init in application oncreate:
