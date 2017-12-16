@@ -16,6 +16,7 @@
 
 package com.mindorks.tensorflowexample;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -107,11 +108,20 @@ public class MainActivity extends AppCompatActivity {
         //initTensorFlowAndLoadModel();
     }
 
+     ProgressDialog soDialog;
+    ProgressDialog pbDialog;
+
     private void downloadFile() {
+
+        soDialog = new ProgressDialog(this);
+        soDialog.setMessage("so downloading");
+        soDialog.setIndeterminate(false);
+        soDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 
         TfFileDownloader.downloadSo("", new TfFileDownloader.DownloadCallback() {
             @Override
             public void onPending(String url) {
+                soDialog.show();
 
             }
 
@@ -119,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(String url, String filePath) {
                 try {
                     NotifyUtil.cancel(8988);
+                    soDialog.dismiss();
                     System.load(filePath);
                     downloadPb();
                     MyToast.success("download success");
@@ -130,12 +141,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgress(String fileName, int soFarBytes, int totalBytes) {
                 NotifyUtil.buildProgress(8988,R.mipmap.ic_launcher,fileName,soFarBytes,totalBytes,"").show();
+                soDialog.setMax(totalBytes);
+                soDialog.setProgress(soFarBytes);
             }
 
             @Override
             public void onFail(String url, Throwable e) {
                 e.printStackTrace();
                 NotifyUtil.cancel(8988);
+                soDialog.dismiss();
 
             }
         });
@@ -193,12 +207,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void downloadPb() {
+        pbDialog = new ProgressDialog(this);
+        pbDialog.setIndeterminate(false);
+        pbDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         TfFileDownloader.downPb(PB_URL,
             "old/tensorflow_inception_graph.pb",
             "",
             new TfFileDownloader.DownloadCallback() {
                 @Override
                 public void onPending(String url) {
+                    pbDialog.setMessage("pb downloading");
+                    pbDialog.show();
 
                 }
 
@@ -206,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(String url, String filePath) {
                 //使用load方法加载内部储存的SO库
                 try {
+                    pbDialog.dismiss();
                     NotifyUtil.cancel(8989);
                     initTensorFlowAndLoadModel(filePath);
                     MyToast.success("download success");
@@ -219,15 +239,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgress(String fileName, int soFarBytes, int totalBytes) {
                 NotifyUtil.buildProgress(8989,R.mipmap.ic_launcher,fileName,soFarBytes,totalBytes,"").show();
+                pbDialog.setMax(totalBytes);
+                pbDialog.setProgress(soFarBytes);
             }
 
             @Override
             public void onFail(String url, Throwable e) {
                 NotifyUtil.cancel(8989);
+                pbDialog.dismiss();
 
             }
         });
     }
+
+
 
     @Override
     protected void onResume() {
@@ -250,6 +275,13 @@ public class MainActivity extends AppCompatActivity {
                 classifier.close();
             }
         });
+
+        if(soDialog!=null){
+            soDialog.dismiss();
+        }
+        if(pbDialog !=null){
+            pbDialog.dismiss();
+        }
     }
 
     private void initTensorFlowAndLoadModel(final String filePath) {
